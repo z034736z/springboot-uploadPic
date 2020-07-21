@@ -1,0 +1,31 @@
+server:
+  port: 9002
+  servlet:
+    context-path: /springBoot
+
+
+logging:
+  file:
+    path: hello.log
+
+
+spring:
+  thymeleaf:
+    cache: false
+    mode: LEGACYHTML5
+    encoding: UTF-8
+    servlet:
+      content-type: text/html
+    prefix: classpath:/templates/
+    suffix: .html
+
+  datasource:
+    username: js_supply
+    password: jsupp12345
+    url: jdbc:oracle:thin:@//192.168.0.15:1521/jsypdc
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+    type: com.alibaba.druid.pool.DruidDataSource
+
+mybatis:
+  type-aliases-package: com.study.hello.spring.boot.entity
+  mapper-locations: classpath:mapper/*.xml

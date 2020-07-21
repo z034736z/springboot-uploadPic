@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.hello.spring.boot.mapper.UserMapper">
+  <resultMap id="BaseResultMap" type="com.study.hello.spring.boot.entity.User">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="age" jdbcType="INTEGER" property="age" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+  </resultMap>
+
+  <select id="getPicInfo" parameterType="map" resultType="hashmap">
+    select b.GOODS_CODE,
+    case a.TARGET_FIELD
+    when 'authorizeFile' then '授权'
+    when 'confirmJoinFile' then '回执'
+    when 'qualityFile' then '质量'
+    when 'lowPriceFile' then '全国最低价'
+    when 'jsPriceFile' then '江苏价格' end TYPES
+    , b.ADD_USER_NAME
+    ,a.URL
+    from STD_ATTACHMENT a, BID_GOODS_DECLARE b
+    where TARGET_TABLE = 'BID_GOODS_DECLARE'
+    and b.project_id = '0D3E967818519D5B65BB95555F28F426'
+    and a.TARGET_ID = b.GOODS_CODE
+    <if test="flag1 != null">
+      AND b.col_09 = 1
+    </if>
+    <if test="flag2 != null">
+      AND b.col_10 != 1
+    </if>
+    <if test="flag3 != null">
+      AND b.BID_PRODUCT_ID in (
+      select STANDARD_ID from BID_LM_PRODUCT
+      where STANDARD_COMPANY_NAME in (
+      select STANDARD_COMPANY_NAME from (
+      select a.STANDARD_COMPANY_NAME,count(1) sy,
+      sum(case when b.INITIALIZATION_STATE = 1 then 1 else 0 end) ytj
+      from BID_LM_PRODUCT a left join BID_GOODS_DECLARE b
+      on a.STANDARD_ID = b.BID_PRODUCT_ID
+      group by a.STANDARD_COMPANY_NAME
+      ) where ytj &lt; sy
+      )
+      )
+    </if>
+  </select>
+</mapper>
